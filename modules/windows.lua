@@ -1,68 +1,59 @@
--- hs.hotkey.bind({"cmd", "alt"}, "H", function()
--- hs.notify.new({title="我是e神", informativeText="我来自月球"}):send()
--- end)
+-- window management
+local application = require "hs.application"
+local hotkey = require "hs.hotkey"
+local window = require "hs.window"
+local layout = require "hs.layout"
+local grid = require "hs.grid"
+local hints = require "hs.hints"
 
--- hs.hotkey.bind({"cmd", "alt"}, "H", function()
--- 	local win = hs.window.focusedWindow()
--- 	local f = win:frame()
--- 	f.x = f.x - 10
--- 	win:setFrame(f)
--- end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
-  hs.reload()
-end)
-hs.notify.new({title="hammerspoon", informativeText="配置已重新加载"}):send()
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Left", function()
-  local win = hs.window.focusedWindow()
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
-
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w / 2
-  f.h = max.h
-  win:setFrame(f)
-  hs.alert.show("Move Left")
+hotkey.bind(hyper, "Left", function()
+  window.focusedWindow():moveToUnit(layout.left50)
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Right", function()
-  local win = hs.window.focusedWindow()
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
-
-  f.x = max.x + (max.w / 2)
-  f.y = max.y
-  f.w = max.w / 2
-  f.h = max.h
-  win:setFrame(f)
-  hs.alert.show("Move Right")
+hotkey.bind(hyper, "Right", function()
+  window.focusedWindow():moveToUnit(layout.right50)
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Up", function()
-  local win = hs.window.focusedWindow()
-  local f = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
-
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w
-  f.h = max.h
-  win:setFrame(f)
+hotkey.bind(hyper, "Up", function()
+  window.focusedWindow():moveToUnit'[0,0,100,50]'
 end)
 
-hs.hotkey.bind({"cmd", "alt"}, "H", function()
-  hs.window.switcher.nextWindow()
+hotkey.bind(hyper, "Down", function()
+  window.focusedWindow():moveToUnit'[0,50,100,100]'
+end)
+
+-- maximize window
+hotkey.bind(hyper, 'tab', function() toggle_fullscreen() end)
+-- Defines for window maximize toggler
+local frameCache = {}
+-- Toggle a window between its normal size, and being maximized
+function toggle_fullscreen()
+    local win = window.focusedWindow()
+    if frameCache[win:id()] then
+        win:setFrame(frameCache[win:id()])
+        frameCache[win:id()] = nil
+    else
+        frameCache[win:id()] = win:frame()
+        win:maximize()
+    end
+end
+
+-- Displays a keyboard hint for switching focus to each window
+hotkey.bind(hyperShift, '/', function()
+    hints.windowHints()
+    -- Display current application window
+    -- hints.windowHints(hs.window.focusedWindow():application():allWindows())
+end)
+
+hotkey.bind({"cmd", "alt"}, "H", function()
+  window.switcher.nextWindow()
 end)
 
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "M", function ()
-  local application = require "hs.application"
-  focusScreen(hs.window.focusedWindow():screen():next())
+hotkey.bind(hyper, "M", function ()
+  focusScreen(window.focusedWindow():screen():next())
 end)
 
 --Predicate that checks if a window belongs to a screen
@@ -75,12 +66,38 @@ function focusScreen(screen)
   --If no windows exist, bring focus to desktop. Otherwise, set focus on
   --front-most application window.
   local windows = hs.fnutils.filter(
-      hs.window.orderedWindows(),
+      window.orderedWindows(),
       hs.fnutils.partial(isInScreen, screen))
-  local windowToFocus = #windows > 0 and windows[1] or hs.window.desktop()
+  local windowToFocus = #windows > 0 and windows[1] or window.desktop()
   windowToFocus:focus()
 
   -- Move mouse to center of screen
   local pt = hs.geometry.rectMidPoint(screen:fullFrame())
   hs.mouse.setAbsolutePosition(pt)
 end
+
+-- maximized active window and move to selected monitor
+moveto = function(win, n)
+  local screens = hs.screen.allScreens()
+  if n > #screens then
+    hs.alert.show("Only " .. #screens .. " monitors ")
+  else
+    local toWin = hs.screen.allScreens()[n]:name()
+    hs.alert.show("Move " .. win:application():name() .. " to " .. toWin)
+
+    layout.apply({{nil, win:title(), toWin, layout.maximized, nil, nil}})
+    
+  end
+end
+hotkey.bind(hyperShift, "1", function()
+  local win = window.focusedWindow()
+  moveto(win, 1)
+end)
+hotkey.bind(hyperShift, "2", function()
+  local win = window.focusedWindow()
+  moveto(win, 2)
+end)
+hotkey.bind(hyperShift, "3", function()
+  local win = window.focusedWindow()
+  moveto(win, 3)
+end)
