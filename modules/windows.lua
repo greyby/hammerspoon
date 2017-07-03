@@ -5,21 +5,39 @@ local window = require "hs.window"
 local layout = require "hs.layout"
 local grid = require "hs.grid"
 local hints = require "hs.hints"
+local screen = require "hs.screen"
 
+-- default 0.2
+window.animationDuration = 0
 
+-- Set screen watcher, in case you connect a new monitor, or unplug a monitor
+screens = {}
+screenArr = {}
+local screenwatcher = screen.watcher.new(function()
+  screens = screen.allScreens()
+end)
+screenwatcher:start()
 
+-- left half
 hotkey.bind(hyper, "Left", function()
-  window.focusedWindow():moveToUnit(layout.left50)
+  if window.focusedWindow() then
+    window.focusedWindow():moveToUnit(layout.left50)
+  else
+    alert.show("No active window")
+  end
 end)
 
+-- right half
 hotkey.bind(hyper, "Right", function()
   window.focusedWindow():moveToUnit(layout.right50)
 end)
 
+-- left half
 hotkey.bind(hyper, "Up", function()
   window.focusedWindow():moveToUnit'[0,0,100,50]'
 end)
 
+-- left half
 hotkey.bind(hyper, "Down", function()
   window.focusedWindow():moveToUnit'[0,50,100,100]'
 end)
@@ -78,25 +96,28 @@ end
 
 -- maximized active window and move to selected monitor
 moveto = function(win, n)
-  local screens = hs.screen.allScreens()
+  local screens = screen.allScreens()
   if n > #screens then
     hs.alert.show("Only " .. #screens .. " monitors ")
   else
-    local toWin = hs.screen.allScreens()[n]:name()
+    local toWin = screen.allScreens()[n]:name()
     hs.alert.show("Move " .. win:application():name() .. " to " .. toWin)
 
     layout.apply({{nil, win:title(), toWin, layout.maximized, nil, nil}})
     
   end
 end
+
 hotkey.bind(hyperShift, "1", function()
   local win = window.focusedWindow()
   moveto(win, 1)
 end)
+
 hotkey.bind(hyperShift, "2", function()
   local win = window.focusedWindow()
   moveto(win, 2)
 end)
+
 hotkey.bind(hyperShift, "3", function()
   local win = window.focusedWindow()
   moveto(win, 3)
