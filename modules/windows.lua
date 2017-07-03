@@ -10,14 +10,6 @@ local screen = require "hs.screen"
 -- default 0.2
 window.animationDuration = 0
 
--- Set screen watcher, in case you connect a new monitor, or unplug a monitor
-screens = {}
-screenArr = {}
-local screenwatcher = screen.watcher.new(function()
-  screens = screen.allScreens()
-end)
-screenwatcher:start()
-
 -- left half
 hotkey.bind(hyper, "Left", function()
   if window.focusedWindow() then
@@ -32,22 +24,48 @@ hotkey.bind(hyper, "Right", function()
   window.focusedWindow():moveToUnit(layout.right50)
 end)
 
--- left half
+-- top half
 hotkey.bind(hyper, "Up", function()
   window.focusedWindow():moveToUnit'[0,0,100,50]'
 end)
 
--- left half
+-- bottom half
 hotkey.bind(hyper, "Down", function()
   window.focusedWindow():moveToUnit'[0,50,100,100]'
 end)
 
+-- left top quarter
+hotkey.bind(hyperAlt, "Left", function()
+  window.focusedWindow():moveToUnit'[0,0,50,50]'
+end)
+
+-- right bottom quarter
+hotkey.bind(hyperAlt, "Right", function()
+  window.focusedWindow():moveToUnit'[50,50,100,100]'
+end)
+
+-- right top quarter
+hotkey.bind(hyperAlt, "Up", function()
+  window.focusedWindow():moveToUnit'[50,0,100,50]'
+end)
+
+-- left bottom quarter
+hotkey.bind(hyperAlt, "Down", function()
+  window.focusedWindow():moveToUnit'[0,50,50,100]'
+end)
+
+-- full screen
+hotkey.bind(hyper, 'F', function() 
+  window.focusedWindow():toggleFullScreen()
+end)
+
 -- maximize window
-hotkey.bind(hyper, 'tab', function() toggle_fullscreen() end)
--- Defines for window maximize toggler
+hotkey.bind(hyper, 'M', function() toggle_maximize() end)
+
+-- defines for window maximize toggler
 local frameCache = {}
--- Toggle a window between its normal size, and being maximized
-function toggle_fullscreen()
+-- toggle a window between its normal size, and being maximized
+function toggle_maximize()
     local win = window.focusedWindow()
     if frameCache[win:id()] then
         win:setFrame(frameCache[win:id()])
@@ -58,21 +76,38 @@ function toggle_fullscreen()
     end
 end
 
--- Displays a keyboard hint for switching focus to each window
+-- display a keyboard hint for switching focus to each window
 hotkey.bind(hyperShift, '/', function()
     hints.windowHints()
     -- Display current application window
     -- hints.windowHints(hs.window.focusedWindow():application():allWindows())
 end)
 
-hotkey.bind({"cmd", "alt"}, "H", function()
+-- switch active window
+hotkey.bind(hyperShift, "H", function()
   window.switcher.nextWindow()
 end)
 
+-- move active window to previous monitor
+hotkey.bind(hyperShift, "Left", function()
+  hs.window.focusedWindow():moveOneScreenWest()
+end)
 
-hotkey.bind(hyper, "M", function ()
+-- move active window to next monitor
+hotkey.bind(hyperShift, "Right", function()
+  hs.window.focusedWindow():moveOneScreenEast()
+end)
+
+-- move cursor to previous monitor
+hotkey.bind(hyperCtrl, "Left", function ()
+  focusScreen(window.focusedWindow():screen():previous())
+end)
+
+-- move cursor to next monitor
+hotkey.bind(hyperCtrl, "Right", function ()
   focusScreen(window.focusedWindow():screen():next())
 end)
+
 
 --Predicate that checks if a window belongs to a screen
 function isInScreen(screen, win)
@@ -89,7 +124,7 @@ function focusScreen(screen)
   local windowToFocus = #windows > 0 and windows[1] or window.desktop()
   windowToFocus:focus()
 
-  -- Move mouse to center of screen
+  -- move cursor to center of screen
   local pt = hs.geometry.rectMidPoint(screen:fullFrame())
   hs.mouse.setAbsolutePosition(pt)
 end
@@ -108,6 +143,7 @@ moveto = function(win, n)
   end
 end
 
+-- move cursor to monitor 1 and maximize the window
 hotkey.bind(hyperShift, "1", function()
   local win = window.focusedWindow()
   moveto(win, 1)
