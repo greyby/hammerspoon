@@ -59,6 +59,11 @@ hotkey.bind(hyper, 'F', function()
   window.focusedWindow():toggleFullScreen()
 end)
 
+-- center window
+hotkey.bind(hyper, 'C', function() 
+  window.focusedWindow():centerOnScreen()
+end)
+
 -- maximize window
 hotkey.bind(hyper, 'M', function() toggle_maximize() end)
 
