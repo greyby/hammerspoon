@@ -6,6 +6,10 @@ local layout = require "hs.layout"
 local grid = require "hs.grid"
 local hints = require "hs.hints"
 local screen = require "hs.screen"
+local alert = require "hs.alert"
+local fnutils = require "hs.fnutils"
+local geometry = require "hs.geometry"
+local mouse = require "hs.mouse"
 
 -- default 0.2
 window.animationDuration = 0
@@ -95,12 +99,12 @@ end)
 
 -- move active window to previous monitor
 hotkey.bind(hyperShift, "Left", function()
-  hs.window.focusedWindow():moveOneScreenWest()
+  window.focusedWindow():moveOneScreenWest()
 end)
 
 -- move active window to next monitor
 hotkey.bind(hyperShift, "Right", function()
-  hs.window.focusedWindow():moveOneScreenEast()
+  window.focusedWindow():moveOneScreenEast()
 end)
 
 -- move cursor to previous monitor
@@ -123,25 +127,25 @@ function focusScreen(screen)
   --Get windows within screen, ordered from front to back.
   --If no windows exist, bring focus to desktop. Otherwise, set focus on
   --front-most application window.
-  local windows = hs.fnutils.filter(
+  local windows = fnutils.filter(
       window.orderedWindows(),
-      hs.fnutils.partial(isInScreen, screen))
+      fnutils.partial(isInScreen, screen))
   local windowToFocus = #windows > 0 and windows[1] or window.desktop()
   windowToFocus:focus()
 
   -- move cursor to center of screen
-  local pt = hs.geometry.rectMidPoint(screen:fullFrame())
-  hs.mouse.setAbsolutePosition(pt)
+  local pt = geometry.rectMidPoint(screen:fullFrame())
+  mouse.setAbsolutePosition(pt)
 end
 
 -- maximized active window and move to selected monitor
 moveto = function(win, n)
   local screens = screen.allScreens()
   if n > #screens then
-    hs.alert.show("Only " .. #screens .. " monitors ")
+    alert.show("Only " .. #screens .. " monitors ")
   else
     local toWin = screen.allScreens()[n]:name()
-    hs.alert.show("Move " .. win:application():name() .. " to " .. toWin)
+    alert.show("Move " .. win:application():name() .. " to " .. toWin)
 
     layout.apply({{nil, win:title(), toWin, layout.maximized, nil, nil}})
     
