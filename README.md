@@ -1,3 +1,5 @@
+
+
 |           |  Key           |
 | --------- | -------------- |
 | <kbd>⇧</kbd> | Shift       |
@@ -7,41 +9,41 @@
 
 ## Window Management
 
-
 ### Split Screen Actions
 
-* `⌃⌥⌘ + ←` Left half
-* `⌃⌥⌘ + →` Right half
-* `⌃⌥⌘ + ↑` Top half
-* `⌃⌥⌘ + ↓`	Bottom half
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>←</kbd> Left half
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>→</kbd> Right half
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>↑</kbd> Top half
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>↓</kbd>	Bottom half
 
 ### Quarter Screen Actions
 
-* `⌃⌥⇧ + ←` Left top quarter
-* `⌃⌥⇧ + →` Right bottom quarter
-* `⌃⌥⇧ + ↑` Right top quarter
-* `⌃⌥⇧ + ↓` Left bottom quarter
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⇧</kbd> + <kbd>←</kbd> Left top quarter
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⇧</kbd> + <kbd>→</kbd> Right bottom quarter
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⇧</kbd> + <kbd>↑</kbd> Right top quarter
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⇧</kbd> + <kbd>↓</kbd> Left bottom quarter
 
 ### Multiple Monitor
 
 #### Move Cursor
 
-* `^⌥ + ←` Move cursor to next monitor
-* `^⌥ + →` Move cursor to previous monitor
+* <kbd>⌃</kbd><kbd>⌥</kbd> + <kbd>←</kbd> Move cursor to next monitor
+* <kbd>⌃</kbd><kbd>⌥</kbd> + <kbd>→</kbd> Move cursor to previous monitor
 
 #### Move Windows
 
-* `⇧⌥ + ←` Move active window to previous monitor
-* `⇧⌥ + →` Move active window to next monitor
-* `⇧⌥ + 1` Move active window to monitor 1 and maximize the window
-* `⇧⌥ + 2` Move active window to monitor 2 and maximize the window
+* <kbd>⇧</kbd><kbd>⌥</kbd> + <kbd>←</kbd> Move active window to previous monitor
+* <kbd>⇧</kbd><kbd>⌥</kbd> + <kbd>→</kbd> Move active window to next monitor
+* <kbd>⇧</kbd><kbd>⌥</kbd> + <kbd>1</kbd> Move active window to monitor 1 and maximize the window
+* <kbd>⇧</kbd><kbd>⌥</kbd> + <kbd>2</kbd> Move active window to monitor 2 and maximize the window
 
 
 ### Other
 
-* `⌃⌥⌘ + F` Full Screen
-* `⌃⌥⌘ + M` Maximize Window
-* `⌃⌥⌘ + C` Window Center
-* `⇧⌥ + H`  Switch active window
-* `⇧⌥ + \`  Display a keyboard hint for switching focus to each window
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>F</kbd> Full Screen
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>M</kbd> Maximize Window
+* <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd> + <kbd>C</kbd> Window Center
 
+
+* <kbd>⇧</kbd><kbd>⌥</kbd> + <kbd>H</kbd>  Switch active window
+* <kbd>⇧</kbd><kbd>⌥</kbd> + <kbd>/</kbd>  Display a keyboard hint for switching focus to each window
